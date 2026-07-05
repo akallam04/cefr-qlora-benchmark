@@ -23,12 +23,9 @@ LABEL_TO_CEFR = {1: "A1", 2: "A2", 3: "B1", 4: "B2", 5: "C1", 6: "C2"}
 CEFR_TO_LABEL = {v: k for k, v in LABEL_TO_CEFR.items()}
 CEFR_LEVELS = [LABEL_TO_CEFR[i] for i in range(1, 7)]
 
-# Single source of truth for the fine-tuned model's task format. The
-# completion is one bare digit so classification is a single forward pass
-# with an argmax over exactly six token logits: no generation, no parsing.
-# Bare digit, not " digit": the Llama 3 tokenizer encodes " 1" as two
-# tokens (space 220 + digit) but "1" as one token, verified against the
-# released tokenizer (ids 16 to 21, stable after "Level:").
+# prompt/completion format shared by training and inference. bare digit
+# completion on purpose: llama 3 splits " 1" into two tokens but "1" is
+# one, so prediction stays a single forward pass + argmax over six ids
 CLASSIFY_PROMPT = (
     "Rate the CEFR difficulty of this English sentence on a scale of "
     "1 (A1, easiest) to 6 (C2, hardest).\n"

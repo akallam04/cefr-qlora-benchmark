@@ -51,7 +51,7 @@ def load_model_and_tokenizer(adapter: str, token: str | None):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-    # Native bf16 needs Ampere (capability 8) or newer.
+    # capability >= 8 (ampere+) for native bf16, T4 only emulates it
     compute_dtype = (
         torch.bfloat16 if torch.cuda.get_device_capability(0)[0] >= 8 else torch.float16
     )

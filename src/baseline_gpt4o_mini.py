@@ -54,9 +54,8 @@ SHOTS_PER_CLASS = 3
 MAX_ATTEMPTS = 7
 REQUEST_TIMEOUT_S = 30.0
 
-# Verified 2026-07-05, https://developers.openai.com/api/docs/pricing and
-# mirrors. Raw token counts are stored in the output so cost can be
-# recomputed if these change.
+# gpt-4o-mini prices as of 2026-07-05. raw token counts go into the
+# output json so cost can be recomputed if prices move
 PRICING_USD_PER_1M = {"input": 0.15, "output": 0.60, "as_of": "2026-07-05"}
 
 LABEL_RE = re.compile(r"\b(A1|A2|B1|B2|C1|C2)\b")
@@ -240,9 +239,8 @@ def main() -> None:
     split_path = PROCESSED_DIR / f"{args.split}.csv"
     df = pd.read_csv(split_path)
     if args.limit and args.limit < len(df):
-        # The CSVs are ordered, so a head slice would be nearly all one
-        # class. Take a seeded stratified sample instead, keeping the
-        # original row indices for caching and provenance.
+        # csvs are ordered by class, a head slice would be almost all B1:
+        # seeded stratified sample instead, original row indices kept
         parts = [
             group.sample(
                 n=min(len(group), max(1, round(len(group) * args.limit / len(df)))),

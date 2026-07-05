@@ -52,8 +52,7 @@ def main() -> None:
     from trl import SFTConfig, SFTTrainer
 
     token = os.getenv("HF_TOKEN", "").strip() or None
-    # Native bf16 needs Ampere (capability 8) or newer; is_bf16_supported()
-    # can return True on a T4 because it counts slow emulation.
+    # capability >= 8 (ampere+) for native bf16, T4 only emulates it
     bf16_ok = torch.cuda.get_device_capability(0)[0] >= 8
     per_device = 8 if bf16_ok else 4
     grad_accum = max(1, args.effective_batch // per_device)

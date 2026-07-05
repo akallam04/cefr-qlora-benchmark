@@ -1,0 +1,17 @@
+{
+  "pinned_commit": "2ba4a5005fbff68ab0f863891cf977c50fdcda29",
+  "processed": {
+    "test.csv": "e45e1389a015e20360e0d61b37da4651580cd83c86517b877b0bba3ee8c3a629",
+    "train.csv": "f732bf8e3034dd92275d87ae241c4aaf9bd6514341e3a7ce7507d15a78ef1858",
+    "val.csv": "118b265ecebee30800c1d86212b2b9483760644cac6efe32ab359a6137348728"
+  },
+  "raw": {
+    "CEFR-SP_SCoRE_dev.txt": "693ecb9235eaf0f95f4118722c54d0b0e57f94e94fd962bda3c366a53434f3fe",
+    "CEFR-SP_SCoRE_test.txt": "c272361239443952ab880d1bb7ab1ca8b5debbc5402bf880973b60f5d9fda6bd",
+    "CEFR-SP_SCoRE_train.txt": "d98593b16b6ebaec5e7540aa2757d5ccfb733e35f8a2947a2b5e1066da6be0af",
+    "CEFR-SP_Wikiauto_dev.txt": "e5aaf45e7cba02ae6785716d12c799c1f73e08942d7e2ee36145fdc4bfb8dcf6",
+    "CEFR-SP_Wikiauto_test.txt": "edefde3a3686e9f6fea9c738fde6628ab8fc26a6b5797f75023a274d76cc278a",
+    "CEFR-SP_Wikiauto_train.txt": "f431fbeae144844c929ddff594ae7a7ac927469478a9b524738d81e7f2759c48"
+  },
+  "source_repo": "https://github.com/yukiar/CEFR-SP"
+}

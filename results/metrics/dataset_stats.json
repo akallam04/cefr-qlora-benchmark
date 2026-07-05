@@ -1,0 +1,90 @@
+{
+  "annotator_agreement": {
+    "exact_pct": 41.43,
+    "max_disagreement_levels": 1,
+    "pair_counts": {
+      "1-1": 124,
+      "1-2": 526,
+      "2-1": 22,
+      "2-2": 723,
+      "2-3": 1460,
+      "3-2": 244,
+      "3-3": 1600,
+      "3-4": 1624,
+      "4-3": 479,
+      "4-4": 1227,
+      "4-5": 1047,
+      "5-4": 260,
+      "5-5": 437,
+      "5-6": 126,
+      "6-5": 71,
+      "6-6": 33
+    },
+    "within_one_level_pct": 100.0
+  },
+  "class_distribution": {
+    "test": {
+      "A1": 37,
+      "A2": 158,
+      "B1": 547,
+      "B2": 459,
+      "C1": 187,
+      "C2": 72
+    },
+    "train": {
+      "A1": 47,
+      "A2": 959,
+      "B1": 2244,
+      "B2": 2472,
+      "C1": 1364,
+      "C2": 91
+    },
+    "val": {
+      "A1": 40,
+      "A2": 154,
+      "B1": 513,
+      "B2": 399,
+      "C1": 193,
+      "C2": 67
+    }
+  },
+  "dedupe_and_leakage": {
+    "duplicates_within_test": 0,
+    "duplicates_within_train": 1,
+    "duplicates_within_val": 0,
+    "train_overlapping_test_or_val": 0,
+    "val_overlapping_test": 0
+  },
+  "dropped_at_parse": {
+    "bad_label": 0,
+    "empty_sentence": 0,
+    "malformed": 0
+  },
+  "final_sizes": {
+    "test": 1460,
+    "train": 7177,
+    "val": 1366
+  },
+  "gold_label_policy": "max",
+  "pinned_commit": "2ba4a5005fbff68ab0f863891cf977c50fdcda29",
+  "raw_rows_parsed": 10004,
+  "rows_per_source": {
+    "score": 2551,
+    "wiki-auto": 7453
+  },
+  "sentence_length_tokens": {
+    "all": {
+      "max": 34,
+      "mean": 14.8,
+      "median": 14.0,
+      "p95": 26.0
+    },
+    "test": {
+      "max": 34,
+      "mean": 14.1,
+      "median": 13.0,
+      "p95": 26.0
+    }
+  },
+  "source_repo": "https://github.com/yukiar/CEFR-SP"
+}

@@ -1,0 +1,12 @@
+# GPU training stack, used by the Colab notebook and the script twins on
+# any CUDA machine. Torch is deliberately unpinned: use the CUDA build the
+# environment provides (Colab preinstalls one matched to its drivers).
+# Pinned 2026-07-05 after verifying the transformers v5 / trl v1 APIs.
+transformers==5.13.0
+trl==1.7.1
+peft==0.19.1
+bitsandbytes==0.49.2
+accelerate==1.14.0
+datasets==5.0.0
+wandb==0.28.0
+scikit-learn==1.9.0

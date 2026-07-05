@@ -133,6 +133,12 @@ def main() -> None:
         peft_config=peft_config,
     )
 
+    if not bf16_ok:
+        # fp16 grad scaler needs fp32 grads on the trainable params
+        for p in trainer.model.parameters():
+            if p.requires_grad and p.dtype != torch.float32:
+                p.data = p.data.float()
+
     batch = next(iter(trainer.get_train_dataloader()))
     supervised = (batch["labels"] != -100).sum(dim=1)
     assert 1 <= int(supervised.min()) and int(supervised.max()) <= 2, (

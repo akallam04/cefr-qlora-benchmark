@@ -23,6 +23,26 @@ LABEL_TO_CEFR = {1: "A1", 2: "A2", 3: "B1", 4: "B2", 5: "C1", 6: "C2"}
 CEFR_TO_LABEL = {v: k for k, v in LABEL_TO_CEFR.items()}
 CEFR_LEVELS = [LABEL_TO_CEFR[i] for i in range(1, 7)]
 
+# Single source of truth for the fine-tuned model's task format. The
+# completion is one digit so classification is a single forward pass with
+# an argmax over exactly six token logits: no generation, no parsing.
+CLASSIFY_PROMPT = (
+    "Rate the CEFR difficulty of this English sentence on a scale of "
+    "1 (A1, easiest) to 6 (C2, hardest).\n"
+    "Sentence: {sentence}\n"
+    "Level:"
+)
+
+
+def format_prompt(sentence: str) -> str:
+    """Fill the classification prompt for one sentence."""
+    return CLASSIFY_PROMPT.format(sentence=sentence)
+
+
+def completion_for(label: int) -> str:
+    """Training completion for a gold label: a single leading-space digit."""
+    return " " + str(label)
+
 
 def sha256_file(path: Path) -> str:
     """Return the SHA-256 hex digest of a file."""

@@ -24,8 +24,11 @@ CEFR_TO_LABEL = {v: k for k, v in LABEL_TO_CEFR.items()}
 CEFR_LEVELS = [LABEL_TO_CEFR[i] for i in range(1, 7)]
 
 # Single source of truth for the fine-tuned model's task format. The
-# completion is one digit so classification is a single forward pass with
-# an argmax over exactly six token logits: no generation, no parsing.
+# completion is one bare digit so classification is a single forward pass
+# with an argmax over exactly six token logits: no generation, no parsing.
+# Bare digit, not " digit": the Llama 3 tokenizer encodes " 1" as two
+# tokens (space 220 + digit) but "1" as one token, verified against the
+# released tokenizer (ids 16 to 21, stable after "Level:").
 CLASSIFY_PROMPT = (
     "Rate the CEFR difficulty of this English sentence on a scale of "
     "1 (A1, easiest) to 6 (C2, hardest).\n"
@@ -40,8 +43,8 @@ def format_prompt(sentence: str) -> str:
 
 
 def completion_for(label: int) -> str:
-    """Training completion for a gold label: a single leading-space digit."""
-    return " " + str(label)
+    """Training completion for a gold label: one bare digit, one token."""
+    return str(label)
 
 
 def sha256_file(path: Path) -> str:

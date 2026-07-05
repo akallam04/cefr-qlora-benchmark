@@ -36,11 +36,11 @@ MODEL_ID = "meta-llama/Meta-Llama-3-8B"
 
 
 def label_token_ids(tokenizer) -> list[int]:
-    """Token ids of the six single-token labels ' 1' to ' 6'."""
+    """Token ids of the six single-token bare-digit labels '1' to '6'."""
     ids: list[int] = []
     for digit in "123456":
-        enc = tokenizer.encode(" " + digit, add_special_tokens=False)
-        assert len(enc) == 1, f"label ' {digit}' is not a single token: {enc}"
+        enc = tokenizer.encode(digit, add_special_tokens=False)
+        assert len(enc) == 1, f"label '{digit}' is not a single token: {enc}"
         ids.append(enc[0])
     return ids
 

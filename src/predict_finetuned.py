@@ -51,7 +51,10 @@ def load_model_and_tokenizer(adapter: str, token: str | None):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    # Native bf16 needs Ampere (capability 8) or newer.
+    compute_dtype = (
+        torch.bfloat16 if torch.cuda.get_device_capability(0)[0] >= 8 else torch.float16
+    )
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",

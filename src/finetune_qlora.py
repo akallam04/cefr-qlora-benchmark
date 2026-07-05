@@ -52,7 +52,9 @@ def main() -> None:
     from trl import SFTConfig, SFTTrainer
 
     token = os.getenv("HF_TOKEN", "").strip() or None
-    bf16_ok = torch.cuda.is_bf16_supported()
+    # Native bf16 needs Ampere (capability 8) or newer; is_bf16_supported()
+    # can return True on a T4 because it counts slow emulation.
+    bf16_ok = torch.cuda.get_device_capability(0)[0] >= 8
     per_device = 8 if bf16_ok else 4
     grad_accum = max(1, args.effective_batch // per_device)
 
@@ -109,7 +111,7 @@ def main() -> None:
         gradient_accumulation_steps=grad_accum,
         learning_rate=args.learning_rate,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.03,
+        warmup_steps=max(10, round(0.03 * len(train_ds) * args.epochs / args.effective_batch)),
         bf16=bf16_ok,
         fp16=not bf16_ok,
         max_length=args.max_length,

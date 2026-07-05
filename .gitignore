@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.ipynb_checkpoints/
+
+# Data: rebuilt deterministically by src/prepare_data.py, never committed
+data/
+
+# Weights & Biases local run files
+wandb/
+
+# Local working notes, never published
+NOTES.md
+
+# OS
+.DS_Store

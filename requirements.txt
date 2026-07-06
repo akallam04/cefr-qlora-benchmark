@@ -7,5 +7,6 @@ pandas==3.0.3
 python-dotenv==1.2.2
 requests==2.34.2
 scikit-learn==1.9.0
+scipy==1.17.1
 tqdm==4.68.3
 wandb==0.28.0

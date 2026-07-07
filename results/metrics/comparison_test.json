@@ -1,0 +1,172 @@
+{
+  "dataset_sha256": "e45e1389a015e20360e0d61b37da4651580cd83c86517b877b0bba3ee8c3a629",
+  "mcnemar": {
+    "only_baseline_correct": 205,
+    "only_finetuned_correct": 526,
+    "p_value": 2.2529461265110917e-33
+  },
+  "models": {
+    "gpt-4o-mini": {
+      "cost": {
+        "basis": "measured tokens x published API price",
+        "usd_per_1k_requests": 0.1304
+      },
+      "latency_s": {
+        "mean": 0.583,
+        "median": 0.512,
+        "p95": 0.855
+      },
+      "metrics": {
+        "accuracy_pct": 40.75,
+        "confusion_matrix": [
+          [
+            30,
+            7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            68,
+            50,
+            32,
+            8,
+            0,
+            0
+          ],
+          [
+            107,
+            93,
+            140,
+            200,
+            7,
+            0
+          ],
+          [
+            20,
+            20,
+            39,
+            288,
+            63,
+            29
+          ],
+          [
+            2,
+            1,
+            7,
+            78,
+            55,
+            44
+          ],
+          [
+            0,
+            1,
+            0,
+            17,
+            22,
+            32
+          ]
+        ],
+        "failures": 0,
+        "macro_f1": 0.356,
+        "mae_levels": 0.761,
+        "per_class_f1": {
+          "A1": 0.2273,
+          "A2": 0.303,
+          "B1": 0.366,
+          "B2": 0.5486,
+          "C1": 0.3293,
+          "C2": 0.3616
+        },
+        "quadratic_weighted_kappa": 0.6479,
+        "within_one_level_pct": 85.0
+      },
+      "versions": [
+        "gpt-4o-mini-2024-07-18"
+      ]
+    },
+    "llama-3-8b-qlora": {
+      "cost": {
+        "basis": "NVIDIA L4 at $0.7/h on-demand, 35.15 sentences/s batched, full utilization",
+        "gpu_usd_per_hour": 0.7,
+        "usd_per_1k_requests": 0.0055
+      },
+      "gpu": "NVIDIA L4",
+      "latency_s": {
+        "mean": 0.187,
+        "median": 0.187,
+        "p95": 0.19
+      },
+      "metrics": {
+        "accuracy_pct": 62.74,
+        "confusion_matrix": [
+          [
+            0,
+            31,
+            6,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            105,
+            52,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            110,
+            393,
+            43,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            126,
+            299,
+            33,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            72,
+            111,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            63,
+            8
+          ]
+        ],
+        "failures": 0,
+        "macro_f1": 0.4435,
+        "mae_levels": 0.3822,
+        "per_class_f1": {
+          "A1": 0.0,
+          "A2": 0.5185,
+          "B1": 0.6968,
+          "B2": 0.6834,
+          "C1": 0.562,
+          "C2": 0.2
+        },
+        "quadratic_weighted_kappa": 0.8076,
+        "within_one_level_pct": 99.04
+      },
+      "versions": "checkpoint-1347"
+    }
+  },
+  "n": 1460,
+  "split": "test"
+}

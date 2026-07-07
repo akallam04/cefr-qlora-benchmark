@@ -27,6 +27,21 @@ MODEL_ID = "meta-llama/Meta-Llama-3-8B"
 TARGET_MODULES = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
 
+def oversample(df: pd.DataFrame, floor: int) -> pd.DataFrame:
+    """Duplicate rare-class rows so every class reaches at least floor.
+
+    Train split only, never val or test. Seeded sampling with replacement,
+    so reruns build the identical dataset.
+    """
+    if floor <= 0:
+        return df
+    parts = [df]
+    for _, group in df.groupby("label"):
+        if len(group) < floor:
+            parts.append(group.sample(n=floor - len(group), replace=True, random_state=SEED))
+    return pd.concat(parts, ignore_index=True)
+
+
 def main() -> None:
     """Train the adapter and report the best epoch checkpoint."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -38,6 +53,10 @@ def main() -> None:
     parser.add_argument("--lora-dropout", type=float, default=0.05)
     parser.add_argument("--max-length", type=int, default=128)
     parser.add_argument("--effective-batch", type=int, default=16)
+    parser.add_argument(
+        "--oversample-floor", type=int, default=0,
+        help="duplicate rare-class train rows up to this count per class, 0 = off",
+    )
     parser.add_argument("--no-wandb", action="store_true")
     args = parser.parse_args()
 
@@ -59,6 +78,10 @@ def main() -> None:
 
     train_df = pd.read_csv(PROCESSED_DIR / "train.csv")
     val_df = pd.read_csv(PROCESSED_DIR / "val.csv")
+    train_df = oversample(train_df, args.oversample_floor)
+    if args.oversample_floor:
+        counts = train_df["label"].value_counts().sort_index().to_dict()
+        print(f"train class counts after oversampling to floor {args.oversample_floor}: {counts}")
 
     def to_example(row: pd.Series) -> dict[str, str]:
         return {
@@ -121,7 +144,7 @@ def main() -> None:
         save_strategy="epoch",
         save_total_limit=args.epochs,
         report_to="none" if args.no_wandb else "wandb",
-        run_name=f"qlora-r{args.lora_r}-script",
+        run_name=f"qlora-r{args.lora_r}-os{args.oversample_floor}",
         seed=SEED,
     )
     trainer = SFTTrainer(

@@ -45,6 +45,7 @@ def build_payload(
     gpu: str,
     adapter_repo: str,
     batch_size: int,
+    model_name: str,
 ) -> dict:
     """Shared prediction format, same schema as the baseline files."""
     from sklearn.metrics import accuracy_score, f1_score
@@ -52,7 +53,7 @@ def build_payload(
     golds = df["label"].tolist()
     within = float(np.mean([abs(g - p) <= 1 for g, p in zip(golds, preds)]))
     return {
-        "model": "llama-3-8b-qlora",
+        "model": model_name,
         "adapter_repo": adapter_repo,
         "selected_checkpoint": best_name,
         "gpu": gpu,
@@ -93,8 +94,15 @@ def main() -> None:
     parser.add_argument("--adapter-repo", default="akallam04/Llama-3-8B-cefr-qlora")
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--latency-sample", type=int, default=100)
+    parser.add_argument("--tag", default="", help="suffix for output filenames and model name, e.g. os500")
+    parser.add_argument(
+        "--adapter-subdir", default="",
+        help="upload the adapter under this folder in the repo instead of the root",
+    )
     parser.add_argument("--upload", action="store_true", help="push adapter and prediction files to the Hub")
     args = parser.parse_args()
+    suffix = f"_{args.tag}" if args.tag else ""
+    model_name = "llama-3-8b-qlora" + (f"-{args.tag}" if args.tag else "")
 
     import torch
 
@@ -174,9 +182,9 @@ def main() -> None:
             latencies.append(time.perf_counter() - t0)
         payload = build_payload(
             df, preds, split, wall, latencies, best, scores, gpu,
-            args.adapter_repo, args.batch_size,
+            args.adapter_repo, args.batch_size, model_name,
         )
-        out = PREDICTIONS_DIR / f"llama3_qlora_{split}.json"
+        out = PREDICTIONS_DIR / f"llama3_qlora{suffix}_{split}.json"
         save_json(out, payload)
         agg = payload["aggregate"]
         print(
@@ -189,15 +197,17 @@ def main() -> None:
 
         api = HfApi(token=token)
         create_repo(args.adapter_repo, exist_ok=True, token=token)
+        folder_kwargs = {"path_in_repo": args.adapter_subdir} if args.adapter_subdir else {}
         api.upload_folder(
             folder_path=best_dir,
             repo_id=args.adapter_repo,
             allow_patterns=["adapter_model.safetensors", "adapter_config.json"],
+            **folder_kwargs,
         )
         for split in ("val", "test"):
             api.upload_file(
-                path_or_fileobj=str(PREDICTIONS_DIR / f"llama3_qlora_{split}.json"),
-                path_in_repo=f"benchmark/llama3_qlora_{split}.json",
+                path_or_fileobj=str(PREDICTIONS_DIR / f"llama3_qlora{suffix}_{split}.json"),
+                path_in_repo=f"benchmark/llama3_qlora{suffix}_{split}.json",
                 repo_id=args.adapter_repo,
             )
         print(f"uploaded adapter and prediction files to {args.adapter_repo}")
